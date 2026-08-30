@@ -1,15 +1,4 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import views
-
-router = DefaultRouter()
-for prefix, viewset in [
-    ('customers', views.CustomerViewSet), ('rate-cards', views.RateCardViewSet),
-    ('grinding-transactions', views.GrindingTransactionViewSet), ('ledger-entries', views.LedgerEntryViewSet),
-    ('expenses', views.ExpenseViewSet), ('stock-items', views.StockItemViewSet), ('stock-movements', views.StockMovementViewSet),
-    ('utility-bills', views.UtilityBillViewSet), ('employees', views.EmployeeViewSet), ('attendance', views.AttendanceViewSet),
-    ('payrolls', views.PayrollViewSet), ('maintenance-logs', views.MaintenanceLogViewSet), ('wastage-logs', views.WastageLogViewSet),
-    ('translations', views.UITranslationViewSet),
-]: router.register(prefix, viewset, basename=prefix)
-
-urlpatterns = [path('', include(router.urls)), path('dashboard/', views.dashboard)]
+from django.urls import path
+from . import web_views as v
+app_name='mill'
+urlpatterns=[path('',v.dashboard,name='dashboard'),path('customers/',v.customers,name='customers'),path('customers/new/',v.customer_create,name='customer-create'),path('customers/<int:pk>/',v.customer_detail,name='customer-detail'),path('customers/<int:pk>/payment/',v.customer_payment,name='customer-payment'),path('grinding/',v.grinding,name='grinding'),path('grinding/new/',v.grinding_create,name='grinding-create'),path('grinding/<int:pk>/done/',v.grinding_done,name='grinding-done'),path('expenses/',v.expenses,name='expenses'),path('expenses/new/',v.expense_create,name='expense-create'),path('income/',v.incomes,name='income'),path('income/new/',v.income_create,name='income-create'),path('inventory/',v.inventory,name='inventory'),path('reports/',v.reports,name='reports'),path('my-account/',v.my_account,name='my-account')]

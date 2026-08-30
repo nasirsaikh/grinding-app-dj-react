@@ -1,13 +1,7 @@
-from django.urls import path, include, re_path
-from django.views.static import serve
-from django.conf import settings
 from django.contrib import admin
-from .views import *
+from django.contrib.auth import views as auth_views
+from django.urls import include, path
+from django.conf.urls.i18n import i18n_patterns
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api/", include("backend.mill.urls")),
-    path("api/ui-translations/", ui_translations),
-    re_path(r"^assets/(?P<path>.*)$",serve,{"document_root": settings.BASE_DIR / "frontend" / "dist" / "assets"},),
-    re_path(r"^(?!api/|admin/|assets/).*$", react_app),
-]
+urlpatterns=[path('i18n/',include('django.conf.urls.i18n')),path('api/',include('backend.mill.urls_api'))]
+urlpatterns += i18n_patterns(path('admin/',admin.site.urls),path('login/',auth_views.LoginView.as_view(template_name='registration/login.html'),name='login'),path('logout/',auth_views.LogoutView.as_view(),name='logout'),path('',include('backend.mill.urls')))
